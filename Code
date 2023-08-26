@@ -1,0 +1,122 @@
+#include <iostream>
+#include <vector> 
+using namespace std;
+
+void ParkingList(int n, int m, int a, int b, int c, int d, vector<vector<int>>& matrix);
+void parking(int n, int m, int a, int b, int c, int d, vector<vector<int>>& matrix);
+void park(int n, int m, int a, int b, int c, int d, vector<vector<int>>& matrix);
+void unpark(int n, int m, int a, int b, int c, int d, vector<vector<int>>& matrix);
+
+int main() {
+    int n, m, a = 0, b = 0, c = 0, d = 0;
+    cout << "Enter the row size of the parking lot: ";
+    cin >> n;
+    cout << "Enter the column size of the parking lot: ";
+    cin >> m;
+    vector<vector<int>> matrix(n, vector<int>(m, 0)); 
+
+    ParkingList(n, m, a, b, c, d, matrix);
+    return 0;
+}
+
+void ParkingList(int n, int m, int a, int b, int c, int d, vector<vector<int>>& matrix) {
+    cout << "1. Show the parking lot" << endl;
+    cout << "2. Park a vehicle" << endl;
+    cout << "3. Unpark a vehicle" << endl;
+    cout << "4. Exit" << endl;
+    cout << "Enter your choice: ";
+    int choice;
+    cin >> choice;
+    switch (choice) {
+        case 1:
+            parking(n, m, a, b, c, d, matrix);
+            break;
+        case 2:
+            park(n, m, a, b, c, d, matrix);
+            break;
+        case 3:
+            unpark(n, m, a, b, c, d, matrix);
+            break;
+        case 4:
+            break;
+        default:
+            cout << "Enter a valid parameter" << endl;
+            ParkingList(n, m, a, b, c, d, matrix);
+            break;
+    }
+}
+
+void parking(int n, int m, int a, int b, int c, int d, vector<vector<int>>& matrix) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cout << matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << "0 represents slot available" << endl;
+    cout << "1 represents slot not available" << endl;
+    cout << "2 represents slot accessible parking available" << endl;
+    cout << "3 represents slot accessible parking not available" << endl;
+    ParkingList(n, m, a, b, c, d, matrix);
+}
+
+void park(int n, int m, int a, int b, int c, int d, vector<vector<int>>& matrix) {
+    int sa, sb, sc, cd; 
+    cout << "Where to park?" << endl;
+    cin >> sa >> sb;
+    cout << "Is it accessible parking?" << endl;
+    cout << "0 for yes, 1 for no: ";
+    cin >> sc;
+    if (matrix[sa][sb] == 0 && sc == 1) {
+        matrix[sa][sb] = 1;
+        b++;
+        a--;
+        cout << "Available" << endl;
+    } else if (matrix[sa][sb] == 2 && sc == 0) {
+        matrix[sa][sb] = 3;
+        d++;
+        c--;
+        cout << "Available" << endl;
+    } else {
+        cout << "Not available" << endl;
+    }
+    cout << "Do you want to go to the main page or enter another vehicle?" << endl;
+    cout << "0 for main page, 1 for continue: ";
+    cin >> cd;
+    if (cd == 0) {
+        ParkingList(n, m, a, b, c, d, matrix);
+    } else if (cd == 1) {
+        park(n, m, a, b, c, d, matrix);
+    } else {
+        cout << "Invalid option" << endl;
+    }
+}
+
+void unpark(int n, int m, int a, int b, int c, int d, vector<vector<int>>& matrix) {
+    int sa, sb, cd; 
+    cout << "Choose the vehicle location: ";
+    cin >> sa >> sb;
+    if (matrix[sa][sb] == 1) {
+        matrix[sa][sb] = 0;
+        a++;
+        b--;
+        cout << "Vehicle left" << endl;
+    } else if (matrix[sa][sb] == 3) {
+        matrix[sa][sb] = 2;
+        c++;
+        d--;
+        cout << "Vehicle left" << endl;
+    } else {
+        cout << "The slot is free" << endl;
+    }
+    cout << "Do you want to go to the main page or remove another vehicle?" << endl;
+    cout << "0 for main page, 1 for continue: ";
+    cin >> cd;
+    if (cd == 0) {
+        ParkingList(n, m, a, b, c, d, matrix);
+    } else if (cd == 1) {
+        park(n, m, a, b, c, d, matrix);
+    } else {
+        cout << "Invalid option" << endl;
+    }
+}
